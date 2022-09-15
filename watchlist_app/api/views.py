@@ -19,6 +19,10 @@ class ReviewCreate(generics.CreateAPIView):
         watchlist = WatchList.objects.get(pk=pk)
         
         serializer.save(watchlist=watchlist)
+        
+        
+        
+        
 
 class ReviewList(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
@@ -28,37 +32,15 @@ class ReviewList(generics.ListCreateAPIView):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)
     
+    
+    
+    
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
-# class ReviewDetail(mixins.RetrieveModelMixin,
-#                     mixins.UpdateModelMixin,
-#                     mixins.DestroyModelMixin,
-#                     generics.GenericAPIView):
-#     queryset = Review.objects.all()
-#     serializer_class = ReviewSerializer
 
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-
-# class ReviewList(mixins.ListModelMixin,
-#                   mixins.CreateModelMixin,
-#                   generics.GenericAPIView):
-#     queryset = Review.objects.all()
-#     serializer_class = ReviewSerializer
-
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-
-# class StreamPlatformVS(viewsets.ModelViewSet):
-#     queryset = StreamPlatform.objects.all()
-#     serializer_class = StreamPlatformSerializer
-
-class StreamPlatformVS(viewsets.ReadOnlyModelViewSet):
+class StreamPlatformVS(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing accounts.
     """
@@ -149,51 +131,3 @@ class WatchDetailAV(APIView):
         watchList.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
-        
-
-# @api_view(['GET', 'POST'])
-# def WatchList_list(request):
-#     try:
-#         WatchList = WatchList.objects.get(pk=pk) 
-#     except WatchList.DoesNotExist:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-#     if request.method == 'GET':
-#         WatchLists = WatchList.objects.all()
-#         serializer = WatchListSerializer(WatchLists, many=True)
-#         return Response(serializer.data)
-    
-#     if request.method == 'POST':
-#         serializer = WatchListSerializer(data=request.data)
-#         # validated_data에 딱맞게 들어왔다면,
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.errors, status=400)
-
-# @api_view(['GET', 'PUT', 'DELETE'])
-# def WatchList_detail(request,pk):
-#     try:
-#         WatchList = WatchList.objects.get(pk=pk)
-#     except WatchList.DoesNotExist:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-    
-#     if request.method == 'GET':
-#         WatchList = WatchList.objects.get(pk=pk)
-#         serializer = WatchListSerializer(WatchList)
-#         return Response(serializer.data)
-    
-#     if request.method == 'PUT':
-#         WatchList = WatchList.objects.get(pk=pk)
-#         serializer = WatchListSerializer(WatchList, request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-        
-#         else:
-#             return Response(serializer.errors, status=400)
-    
-#     if request.method == 'DELETE':
-#         WatchList = WatchList.objects.get(pk=pk)
-#         WatchList.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
