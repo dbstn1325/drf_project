@@ -1,43 +1,58 @@
 from watchlist_app.api.serializers import StreamPlatformSerializer, WatchListSerializer, ReviewSerializer
 from watchlist_app.models import WatchList, StreamPlatform, Review
+from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import mixins
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 
+
+# 리뷰 생성
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
+    
+    def get_queryset(self):
+        return Review.objects.all()
     
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         watchlist = WatchList.objects.get(pk=pk)
         
-        serializer.save(watchlist=watchlist)
+        # 유저 리뷰생성 중복 처리
+        user = self.request.user
+        review_queryset = Review.objects.filter(watchlist=watchlist, review_user=user)
+        
+        if review_queryset.exists():
+            raise ValidationError("이미 해당 영화에 리뷰를 남기셨습니다.")
+        
+        serializer.save(watchlist=watchlist, review_user=user)
         
         
         
-        
-
+# 리뷰 리스트
 class ReviewList(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [AdminOrReadOnly]
     
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)
     
     
-    
-    
+# 리뷰 상세
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [AdminOrReadOnly]
 
 
 class StreamPlatformVS(viewsets.ModelViewSet):
