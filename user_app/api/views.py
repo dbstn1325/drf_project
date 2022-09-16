@@ -1,10 +1,11 @@
 from user_app.api.serializers import RegistraionSerializer
-from user_app import models
+# from user_app import models
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST',])
 def logout_view(request):
@@ -27,9 +28,12 @@ def registration_view(request):
             data['response'] = "유저 등록 성공!!"
             data['username'] = account.username
             data['email'] = account.email
-            # serializer의 save()메서드로 착착 저장된 애들(account)을 다시가져와서 조회한다.
-            token = Token.objects.get(user=account).key
-            data['token'] = token        
+            # user(=account)에 대한 refreshToken 메서드를 적용시켜서, refresh token과 access token을 발급받는다.
+            refresh = RefreshToken.for_user(account)
+            data['token'] = {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }
         else:
             data = serializer.errors
         
