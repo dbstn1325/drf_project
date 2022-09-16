@@ -33,6 +33,17 @@ class ReviewCreate(generics.CreateAPIView):
         if review_queryset.exists():
             raise ValidationError("이미 해당 영화에 리뷰를 남기셨습니다.")
         
+        # 리뷰 평균 field 처리
+        # 최초
+        if watchlist.number_rating == 0:
+            watchlist.avg_rating = serializer.validated_data['rating']
+        # 후
+        else:
+            watchlist.avg_rating = ( watchlist.avg_rating + serializer.validated_data['rating'] ) / 2
+        
+        # 조회 수 처리
+        watchlist.number_rating = watchlist.number_rating + 1
+        watchlist.save()
         serializer.save(watchlist=watchlist, review_user=user)
         
         
@@ -41,7 +52,7 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [IsAuthenticated] 
     
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -52,7 +63,7 @@ class ReviewList(generics.ListCreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [ReviewUserOrReadOnly]
 
 
 class StreamPlatformVS(viewsets.ModelViewSet):

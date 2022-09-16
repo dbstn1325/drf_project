@@ -17,3 +17,6 @@ class ReviewUserOrReadOnly(permissions.BasePermission):
         else:
             # obj 는 models 에서 가져오는 것이므로 review_user
             return obj.review_user == request.user
+
+
+        
