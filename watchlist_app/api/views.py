@@ -17,6 +17,15 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 
+class UserReview(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        # username = self.kwargs['username']
+        username = self.request.query_params.get('username')
+        return Review.objects.filter(review_user__username=username)
+
+
 # 리뷰 생성
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
