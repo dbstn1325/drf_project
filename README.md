@@ -353,6 +353,11 @@ http://127.0.0.1:8000/api/watch/
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 [
     {
         "id": 1,
@@ -413,6 +418,11 @@ http://127.0.0.1:8000/api/watch/<int:movie_id>/
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 {
     "id": 3,
     "platform": "Netflix - Updated",
@@ -452,6 +462,11 @@ Body
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 {
     "id": 3,
     "platform": "Netflix - Updated",
@@ -517,6 +532,11 @@ Headers
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 {
     "id": 12,
     "review_user": "yoonsu",
@@ -547,6 +567,11 @@ Headers
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 [
     {
         "id": 9,
@@ -588,6 +613,11 @@ Headers
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 {
     "id": 1,
     "review_user": "yoonsu",
@@ -627,6 +657,11 @@ Body
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 {
     "id": 1,
     "review_user": "yoonsu",
@@ -692,6 +727,11 @@ Headers
 
 Response
 ```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
 [
     {
         "id": 1,
