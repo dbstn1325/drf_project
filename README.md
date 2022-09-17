@@ -746,7 +746,7 @@ Vary: Accept
         "id": 4,
         "review_user": "yoonsu",
         "rating": 5,
-        "description": "개재밌다ㄹㅇ 2편 언제나오냨ㅋㅋㅋ",
+        "description": "진짜재밌다ㅋㅋ 2편 언제나와요ㅜㅠ",
         "active": false,
         "created_at": "2022-09-15T09:15:31.281556Z",
         "updated_at": "2022-09-15T09:15:31.281590Z"
