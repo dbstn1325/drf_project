@@ -766,3 +766,42 @@ Vary: Accept
     }
 ]
 ```
+
+### 7. 검색
+#### class SearchWatchListGV(generics.ListAPIView):
+* 요청 방식: get
+* 기능: 영화 제목, 스트리밍 플랫폼에 대한 검색
+* 권한: 모든 사이트 접속자 가능
+* url: http://127.0.0.1:8000/api/watch/search_list/
+
+
+예시
+```
+http://127.0.0.1:8000/api/watch/search_list/
+```
+
+Response
+```
+HTTP 200 OK
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
+{
+    "count": 2,
+    "next": "http://127.0.0.1:8000/api/watch/search_list/?p=2&search=%EA%B3%B5",
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "platform": "Netflix - Updated",
+            "title": "공조",
+            "storyline": "공조2 개봉기념 무료 출시!",
+            "active": true,
+            "avg_rating": 4.25,
+            "number_rating": 4,
+            "created_at": "2022-09-14T05:06:04.543877Z"
+        }
+    ]
+}
+```
