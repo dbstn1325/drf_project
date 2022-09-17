@@ -1,3 +1,4 @@
+from watchlist_app.api.pagination import WatchlistCuPagination, WatchlistOPPagination, WatchlistPagination
 from watchlist_app.api.serializers import StreamPlatformSerializer, WatchListSerializer, ReviewSerializer
 from watchlist_app.models import WatchList, StreamPlatform, Review
 from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
@@ -11,9 +12,12 @@ from rest_framework.views import APIView
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework import filters
+
 
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 
@@ -130,6 +134,14 @@ class StreamPlatformDetailAV(APIView):
         return Response(status.HTTP_204_NO_CONTENT)
         
             
+
+class SearchWatchListGV(generics.ListAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['title', 'active']
+    pagination_class = WatchlistPagination
+    
     
     
 
