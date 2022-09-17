@@ -622,7 +622,7 @@ Vary: Accept
     "id": 1,
     "review_user": "yoonsu",
     "rating": 5,
-    "description": "마동석 드립 개웃김ㅋㅋㅋ",
+    "description": "마동석 드립 너무웃김ㅋㅋㅋ",
     "active": true,
     "created_at": "2022-09-15T06:02:31.162792Z",
     "updated_at": "2022-09-15T06:02:31.162838Z"
