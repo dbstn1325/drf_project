@@ -340,6 +340,9 @@ Vary: Accept
 
 
 ### 4. 영화 리스트
+* 유저들이 매긴 평점의 평균 표시
+* 조회 수 표시
+
 #### WatchListAV(APIView)
 * 요청 방식: get
 * 기능: 모든 영화 리스트 조회
@@ -513,6 +516,7 @@ Vary: Accept
 
 
 ### 5. 리뷰
+* 각 영화에 대한 유저의 평점 부여 가능
 #### class ReviewList(generics.ListCreateAPIView)
 * 요청 방식: get
 * 기능: 특정 영화에 대한 리뷰 생성
