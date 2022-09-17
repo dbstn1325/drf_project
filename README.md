@@ -789,7 +789,7 @@ Vary: Accept
 
 {
     "count": 2,
-    "next": "http://127.0.0.1:8000/api/watch/search_list/?p=2&search=%EA%B3%B5",
+    "next": "http://127.0.0.1:8000/api/watch/search_list/?p=공",
     "previous": null,
     "results": [
         {
