@@ -12,7 +12,7 @@ class StreamPlatform(models.Model):
 
 # Create your models here.
 class WatchList(models.Model):
-    platform = models.ForeignKey(StreamPlatform, on_delete=models.CASCADE, related_name="watchlista") 
+    platform = models.ForeignKey(StreamPlatform, on_delete=models.CASCADE, related_name="watchlist") 
     title = models.CharField(max_length=50)
     storyline = models.CharField(max_length=200)
     active = models.BooleanField(default=True)
