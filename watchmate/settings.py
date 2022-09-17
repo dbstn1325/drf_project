@@ -161,11 +161,10 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
     
-    # django 전용 render페이지가 아니라, 오리지널 json형태로 보고 싶으면
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        
-    ]
+    # # django 전용 render페이지가 아니라, 오리지널 json형태로 보고 싶으면
+    # 'DEFAULT_RENDERER_CLASSES': [
+    #     'rest_framework.renderers.JSONRenderer',
+    # ]
 
     
 }

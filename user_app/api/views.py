@@ -13,7 +13,19 @@ def logout_view(request):
     if request.method == 'POST':
         # 현재 로그인한 유저(request.user)
         request.user.auth_token.delete()
-        return Response(status= status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+    
+    # if request.method == 'POST':
+    #     try:
+    #         # a = request.META['HTTP_AUTHORIZATION']
+    #         # print(a)
+    #         refresh = RefreshToken.for_user(request.user)
+    #         print("refresh")
+            
+    #         # refresh.delete()
+    #         return Response(status=status.HTTP_205_RESET_CONTENT)
+    #     except Exception as e:
+    #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST',])
 def registration_view(request):
@@ -22,6 +34,7 @@ def registration_view(request):
         serializer = RegistraionSerializer(data=request.data)
         
         data = {}
+        status_code = ""
         
         if serializer.is_valid():
             account = serializer.save()
@@ -34,7 +47,13 @@ def registration_view(request):
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             }
+            
+            # token = Token.objects.get(user=account).key
+            # data['token'] = token
+            
+            status_code = status.HTTP_201_CREATED
         else:
             data = serializer.errors
+            status_code = status.HTTP_400_BAD_REQUEST
         
-        return Response(data)
+        return Response(data, status=status_code)

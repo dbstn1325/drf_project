@@ -1,28 +1,32 @@
-from watchlist_app.api.pagination import WatchlistCuPagination, WatchlistOPPagination, WatchlistPagination
-from watchlist_app.api.serializers import StreamPlatformSerializer, WatchListSerializer, ReviewSerializer
-from watchlist_app.models import WatchList, StreamPlatform, Review
-from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
-from watchlist_app.api.throttling import ReviewListThrottle, ReviewDetailThrottle
-
-from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
-from rest_framework.decorators import api_view
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework import mixins
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework import filters
-
-
-from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics, mixins, status, viewsets
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
+from rest_framework.throttling import (AnonRateThrottle, ScopedRateThrottle,
+                                       UserRateThrottle)
+from rest_framework.views import APIView
+from watchlist_app.api.pagination import (WatchlistCuPagination,
+                                          WatchlistOPPagination,
+                                          WatchlistPagination)
+from watchlist_app.api.permissions import (IsAdminOrReadOnly,
+                                           IsReviewUserOrReadOnly)
+from watchlist_app.api.serializers import (ReviewSerializer,
+                                           StreamPlatformSerializer,
+                                           WatchListSerializer)
+from watchlist_app.api.throttling import (ReviewDetailThrottle,
+                                          ReviewListThrottle)
+from watchlist_app.models import Review, StreamPlatform, WatchList
 
-from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 
 class UserReview(generics.ListAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ReviewListThrottle, AnonRateThrottle]
+    
 
     def get_queryset(self):
         # username = self.kwargs['username']
@@ -64,7 +68,7 @@ class ReviewCreate(generics.CreateAPIView):
         
         
         
-# 리뷰 리스트
+# 리뷰 리스트 확인
 class ReviewList(generics.ListCreateAPIView):
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
@@ -76,7 +80,7 @@ class ReviewList(generics.ListCreateAPIView):
         return Review.objects.filter(watchlist=pk)
     
 
-# 리뷰 상세
+# 리뷰 상세 확인 (업데이트, 삭제)
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
@@ -85,12 +89,14 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     throttle_scope = 'review_detail'
 
 
+# viewsets => CREATE, UPDATE, DELETE 다 가능!
 class StreamPlatformVS(viewsets.ModelViewSet):
-    """
-    A simple ViewSet for viewing accounts.
-    """
+    permission_classes = [IsAdminOrReadOnly]
+    
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
+
+
 
 class StreamPlatformAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
@@ -138,14 +144,25 @@ class StreamPlatformDetailAV(APIView):
 class SearchWatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
+    pagination_class = WatchlistPagination
+    
+    # filter_backends = [filters.SearchFilter]
+    # filter_backends = ['title', 'platform__name']
+    
     # filter_backends = [filters.SearchFilter]
     # search_fields = ['title', 'active']
-    pagination_class = WatchlistPagination
+    
+    # filter_backends = [filters.OrderingFilter]
+    # ordering_fields = ['-avg_rating']
+    
+    
     
     
     
 
 class WatchListAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
+    
     def get(self, request):
         watchList = WatchList.objects.all()
         serializer = WatchListSerializer(watchList, many=True)
@@ -163,6 +180,7 @@ class WatchListAV(APIView):
         
 class WatchDetailAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
+    throttle_classes = [AnonRateThrottle]
     
     def get(self, request, pk):
         try:
