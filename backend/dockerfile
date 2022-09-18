@@ -1,30 +1,30 @@
 FROM python:3.9.1
 
-RUN mkdir /home/yoon/.ssh/
+RUN mkdir /root/.ssh/
 
 # 이미지를 가지는 사람은 private key 도 가질 수 있으니 유의!
-ADD ./.ssh/id_rsa /home/yoon/.ssh/id_rsa
+ADD ./.ssh/id_rsa /root/.ssh/id_rsa
 
-RUN chmod 600 /home/yoon/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
 
 # github에 등록해둔 SSH key를 옮겨줘서, 묻는 과정 없애게 한다
-RUN touch /home/yoon/.ssh/known_hosts
-RUN ssh-keyscan github.com >> /home/yoon/.ssh/known_hosts
+RUN touch /root/.ssh/known_hosts
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
-WORKDIR /home/yoon/drf_project/
+WORKDIR /home/yoon/
 
-RUN echo "test21"
+RUN echo "test2"
 
 # release/0.1 branch 로부터 깃 클론을 진행해준디
 RUN git clone -b release/0.1 --single-branch git@github.com:dbstn1325/drf_project.git
 
-WORKDIR /home/yoon/drf_project/backend
+WORKDIR /home/yoon/drf_project/backend/
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
-RUN pip install gunicorn
+RUN pip3 install gunicorn
 
-RUN pip install mysqlclient
+RUN pip3 install mysqlclient
 
 EXPOSE 8000
 
