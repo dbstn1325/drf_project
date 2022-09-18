@@ -1,0 +1,4 @@
+#!/Users/yoonsu/.pyenv/versions/3.10.4/envs/myvenv/bin/python
+import pydoc
+if __name__ == '__main__':
+      pydoc.cli()
