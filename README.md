@@ -777,7 +777,7 @@ Vary: Accept
 
 예시
 ```
-http://127.0.0.1:8000/api/watch/search_list/
+http://127.0.0.1:8000/api/watch/search_list/?p=공
 ```
 
 Response
